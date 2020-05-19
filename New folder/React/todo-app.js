@@ -1,6 +1,10 @@
 function Task(props) {
-    return <li>{props.name}, {props.dueDate},  {props.delete}</li>
-    
+
+    if(props.isDone === true) {
+        return <li>{props.name} {props.dueDate} {props.isDone} {props.mark} {props.delete}</li>
+    } else {
+        return <li>{props.name} {props.dueDate} {props.isDone} {props.mark}  {props.delete}</li>
+    }
 }
 
 class TodoList extends React.Component {
@@ -9,6 +13,7 @@ class TodoList extends React.Component {
         this.state = {list: props.list};
         this.handleAddTask = this.handleAddTask.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleMark = this.handleMark.bind(this);
     }
     handleAddTask(task) {
         console.log("add task clicked");
@@ -23,6 +28,23 @@ class TodoList extends React.Component {
         })
     }
 
+    handleMark (id) {
+        const markTask = this.state.list.filter((task) => {
+            if (task.id === id) {
+
+                if (task.isDone === true) {
+                    task.isDone = false;
+                } else {
+                    task.isDone = true;
+                }
+            }
+            return task;
+        })
+        this.setState({
+            list: markTask
+        })
+    }
+
     render() {
         return (
             <div>
@@ -30,10 +52,10 @@ class TodoList extends React.Component {
                 <ol>
                     {
                         this.state.list.map((t) =>
-                            <Task key={t.id} name={t.name} dueDate={t.dueDate} delete={t.delete}/>)
+                            <Task key={t.id} name={t.name} dueDate={t.dueDate} delete={t.delete} isDone={t.isDone} mark={t.mark}/>)
                     }
                 </ol>
-                <TaskNameForm onAddTask={this.handleAddTask} onDelete={this.handleDelete}/>
+                <TaskNameForm onAddTask={this.handleAddTask} onDelete={this.handleDelete} onMark={this.handleMark}/>
             </div>
         );
     }
@@ -54,7 +76,9 @@ class TaskNameForm extends React.Component {
         event.preventDefault();
         const id = Date.now();
         const task = {id:Date.now(), name: this.state.value, 
-        dueDate: this.state.dueDate, delete: <button type ="button" onClick = {() => this.handleDelete(id)}>Delete</button>};
+        dueDate: this.state.dueDate, isDone:false,
+        delete: <button type ="button" onClick = {() => this.handleDelete(id)}>Delete</button>,
+        mark:<input type = "checkbox" onClick = {() => this.handleMark(id)}></input>};
         
         // add the task object to the task list
         this.props.onAddTask(task);
@@ -74,6 +98,10 @@ class TaskNameForm extends React.Component {
 
     handleDelete(id) {
         this.props.onDelete(id);
+    }
+
+    handleMark(id) {
+        this.props.onMark(id);
     }
 
     render() {

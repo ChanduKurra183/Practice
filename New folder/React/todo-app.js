@@ -1,5 +1,5 @@
 function Task(props) {
-    return <li>{props.name}, {props.dueDate}</li>
+    return <li>{props.name}, {props.dueDate},  {props.delete}</li>
     
 }
 
@@ -8,12 +8,21 @@ class TodoList extends React.Component {
         super(props);
         this.state = {list: props.list};
         this.handleAddTask = this.handleAddTask.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
     handleAddTask(task) {
         console.log("add task clicked");
         this.state.list.push(task);
         this.setState({list: this.state.list})
     }
+
+    handleDelete(id) {
+        const filterTasks = this.state.list.filter(task => task.id !== id);
+        this.setState({
+            list: filterTasks
+        })
+    }
+
     render() {
         return (
             <div>
@@ -21,10 +30,10 @@ class TodoList extends React.Component {
                 <ol>
                     {
                         this.state.list.map((t) =>
-                            <Task key={t.id} name={t.name} dueDate={t.dueDate} />)
+                            <Task key={t.id} name={t.name} dueDate={t.dueDate} delete={t.delete}/>)
                     }
                 </ol>
-                <TaskNameForm onAddTask={this.handleAddTask} />
+                <TaskNameForm onAddTask={this.handleAddTask} onDelete={this.handleDelete}/>
             </div>
         );
     }
@@ -43,17 +52,28 @@ class TaskNameForm extends React.Component {
         const taskList = this.props.taskList;
         // create a task object
         event.preventDefault();
+        const id = Date.now();
         const task = {id:Date.now(), name: this.state.value, 
-        dueDate: this.state.dueDate};
+        dueDate: this.state.dueDate, delete: <button type ="button" onClick = {() => this.handleDelete(id)}>Delete</button>};
         
         // add the task object to the task list
         this.props.onAddTask(task);
+        this.state.value="";
+        this.state.dueDate="";
     }
 
 
     handleChange(event) {
         // code to set the state of the component
         this.setState({value: event.target.value});
+    }
+
+    handleDate(event) {
+        this.setState({dueDate: event.target.value});
+    }
+
+    handleDelete(id) {
+        this.props.onDelete(id);
     }
 
     render() {

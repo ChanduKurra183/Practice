@@ -1,9 +1,9 @@
 function Task(props) {
 
     if(props.isDone === true) {
-        return <li>{props.name} {props.dueDate} {props.isDone} {props.mark} {props.delete}</li>
+        return <li>{props.name} {props.dueDate} {props.mark} {props.delete}</li>
     } else {
-        return <li>{props.name} {props.dueDate} {props.isDone} {props.mark}  {props.delete}</li>
+        return <li>{props.name} {props.dueDate} {props.mark}  {props.delete}</li>
     }
 }
 
@@ -65,7 +65,7 @@ class TaskNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: '', dueDate: ''};
-
+        this.handleDate = this.handleDate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -116,3 +116,8 @@ class TaskNameForm extends React.Component {
         );
     }
 }
+
+ReactDOM.render(
+    <TodoList list={[]} />,
+    document.getElementById('todo')
+);

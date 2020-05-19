@@ -12,7 +12,7 @@
                 background-color:yellow;
             }
             .td_class_mark{
-                background-color:red;
+                background-color:green;
             }
         </style>
     </head>
@@ -50,6 +50,7 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Action</th>
+                            <th>Time Stamp</th>
                         </tr>
                         </thead>
                         <tbody id="tbody">		
@@ -68,6 +69,7 @@
         function addTask() {
             title = document.getElementById("title").value;
             desc = document.getElementById("description").value;
+            timeStamp = document. 
             if(title=="" || desc==""){
                 alert("Please enter Title/Description");
                 return;
@@ -86,6 +88,7 @@
                 tbody_data = tbody_data+"<td>"+tasks[i].title+"</td>";
                 tbody_data = tbody_data+"<td>"+tasks[i].desciption+"</td>";
                 tbody_data = tbody_data+'<td><button onclick="deleteTask('+i+')">Delete</button>&nbsp;&nbsp;&nbsp;&nbsp; <button onclick="markTask('+i+')">Mark Done</button></td>';
+                tbody_data = tbody_data+"<td>"+this.dueDate.getDate() + "/" + this.dueDate.getMonth();+"</td>";
                 tbody_data = tbody_data+"</tr>";
             }
             document.getElementById("tbody").innerHTML = tbody_data;
@@ -98,7 +101,7 @@
         
         function markTask(index){
             tds = document.getElementsByClassName("td_class");
-            tds[index].style.backgroundColor = "red";
+            tds[index].style.backgroundColor = "green";
         }
     </script>
 
